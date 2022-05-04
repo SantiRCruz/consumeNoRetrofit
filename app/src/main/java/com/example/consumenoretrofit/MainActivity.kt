@@ -11,5 +11,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun ejemplo() {
         val i = "hola"
+        val e = 56465
     }
 }

@@ -9,8 +9,4 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    private fun ejemplo() {
-        val i = "hola"
-        val e = 56465
-    }
 }

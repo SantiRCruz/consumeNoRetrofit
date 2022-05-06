@@ -4,9 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.JsonReader
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.consumenoretrofit.core.Result
+import com.example.consumenoretrofit.data.local.MainDataSource
 import com.example.consumenoretrofit.data.models.*
+import com.example.consumenoretrofit.presentation.MainViewModel
+import com.example.consumenoretrofit.presentation.MainViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
@@ -20,13 +27,34 @@ import java.nio.charset.StandardCharsets
 
 class MainActivity : AppCompatActivity() {
     private var dataModel: MutableList<Data> = mutableListOf()
+    private val viewModel by viewModels<MainViewModel> { MainViewModelFactory(MainDataSource()) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getInfo()
-        postInfo()
-        putInfo()
-        deleteInfo()
+//        getInfo()
+        getInfo2()
+//        postInfo()
+//        putInfo()
+//        deleteInfo()
+    }
+
+    private fun getInfo2() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.fetchUsers().collect {
+                when(it){
+                    is Result.Loading->{
+                        Log.e("Loading", "Cargandooo")
+                    }
+                    is Result.Success ->{
+                        Log.e("success", it.toString())
+                    }
+                    is Result.Failure ->{
+                        Log.e("Failure", it.toString())
+                    }
+                }
+            }
+        }
     }
 
     private fun deleteInfo() {
